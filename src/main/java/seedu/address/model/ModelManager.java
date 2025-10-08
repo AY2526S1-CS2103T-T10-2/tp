@@ -146,14 +146,26 @@ public class ModelManager implements Model {
     //=========== Filtered Event List Accessors =============================================================
 
     /**
-     * Returns an unmodifiable view of the list of {@code Event} backed by the internal list of
-     * {@code versionedAddressBook}
+     * Returns an unmodifiable view of the filtered event list.
+     * This method provides access to the currently filtered list of events.
+     * The returned list is unmodifiable, meaning that direct modifications to the list
+     * (such as add, remove, clear operations) will throw {@code UnsupportedOperationException}.
+     * To modify events, use the appropriate methods in the Model interface.
+     *
      */
     @Override
     public ObservableList<Event> getFilteredEventList() {
         return filteredEvents;
     }
 
+    /**
+     * Updates the filter predicate for the filtered event list.
+     * This method allows for dynamic filtering of events based on various criteria.
+     * The predicate is applied to each event in the internal event list, and only events
+     * that match the predicate will be visible in the filtered list.
+     * @param predicate The predicate to filter events by. Must not be null.
+     * @throws NullPointerException if {@code predicate} is null.
+     */
     @Override
     public void updateFilteredEventList(Predicate<Event> predicate) {
         requireNonNull(predicate);

@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
+import static seedu.address.model.Model.PREDICATE_SHOW_ALL_EVENTS;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.BENSON;
@@ -16,7 +17,9 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
+import seedu.address.model.event.Event;
 import seedu.address.testutil.AddressBookBuilder;
+import seedu.address.testutil.EventBuilder;
 
 public class ModelManagerTest {
 
@@ -91,6 +94,50 @@ public class ModelManagerTest {
     @Test
     public void getFilteredPersonList_modifyList_throwsUnsupportedOperationException() {
         assertThrows(UnsupportedOperationException.class, () -> modelManager.getFilteredPersonList().remove(0));
+    }
+
+    @Test
+    public void getFilteredEventList_modifyList_throwsUnsupportedOperationException() {
+        assertThrows(UnsupportedOperationException.class, () -> modelManager.getFilteredEventList().remove(0));
+    }
+
+    @Test
+    public void updateFilteredEventList_nullPredicate_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> modelManager.updateFilteredEventList(null));
+    }
+
+    @Test
+    public void updateFilteredEventList_validPredicate_updatesFilteredEventList() {
+        Event event1 = new EventBuilder().withName("Meeting").build();
+        Event event2 = new EventBuilder().withName("Concert").build();
+        modelManager.addEvent(event1);
+        modelManager.addEvent(event2);
+
+        // Filter to show only events with "Meeting" in name
+        modelManager.updateFilteredEventList(event -> event.getName().contains("Meeting"));
+        
+        assertEquals(1, modelManager.getFilteredEventList().size());
+        assertTrue(modelManager.getFilteredEventList().contains(event1));
+        assertFalse(modelManager.getFilteredEventList().contains(event2));
+    }
+
+    @Test
+    public void updateFilteredEventList_showAllEvents_showsAllEvents() {
+        Event event1 = new EventBuilder().withName("Meeting").build();
+        Event event2 = new EventBuilder().withName("Concert").build();
+        modelManager.addEvent(event1);
+        modelManager.addEvent(event2);
+
+        // Initially should show all events
+        assertEquals(2, modelManager.getFilteredEventList().size());
+        
+        // Filter to show only one event
+        modelManager.updateFilteredEventList(event -> event.getName().contains("Meeting"));
+        assertEquals(1, modelManager.getFilteredEventList().size());
+        
+        // Reset to show all events
+        modelManager.updateFilteredEventList(PREDICATE_SHOW_ALL_EVENTS);
+        assertEquals(2, modelManager.getFilteredEventList().size());
     }
 
     @Test

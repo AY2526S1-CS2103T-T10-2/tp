@@ -12,10 +12,9 @@ import seedu.address.model.person.Person;
  * The API of the Model component.
  */
 public interface Model {
-    /** {@code Predicate} that always evaluate to true */
+    /** {@code Predicate} that always evaluate to true for persons */
     Predicate<Person> PREDICATE_SHOW_ALL_PERSONS = unused -> true;
-    
-    /** {@code Predicate} that always evaluate to true */
+    /** {@code Predicate} that always evaluate to true for events */
     Predicate<Event> PREDICATE_SHOW_ALL_EVENTS = unused -> true;
 
     /**
@@ -100,11 +99,19 @@ public interface Model {
      */
     void updateFilteredPersonList(Predicate<Person> predicate);
 
-    /** Returns an unmodifiable view of the filtered event list */
+    /**
+     * Returns an unmodifiable view of the filtered event list.
+     * This list is backed by the internal event list and will automatically update
+     * when the underlying data changes. The list cannot be modified directly.
+     */
     ObservableList<Event> getFilteredEventList();
 
     /**
      * Updates the filter of the filtered event list to filter by the given {@code predicate}.
+     * This method allows for dynamic filtering of events based on various criteria.
+     * The predicate is applied to each event in the list, and only events that match
+     * the predicate will be visible in the filtered list.
+     * @param predicate The predicate to filter events by. Must not be null.
      * @throws NullPointerException if {@code predicate} is null.
      */
     void updateFilteredEventList(Predicate<Event> predicate);
