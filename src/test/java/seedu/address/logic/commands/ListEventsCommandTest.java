@@ -1,11 +1,12 @@
 package seedu.address.logic.commands;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalEvents.getTypicalEvents;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
+
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,8 +15,6 @@ import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.event.Event;
-
-import java.util.List;
 
 /**
  * Contains integration tests (interaction with the Model) and unit tests for ListEventsCommand.
@@ -40,8 +39,8 @@ public class ListEventsCommandTest {
             expectedModel.addEvent(event);
         }
 
-        String expectedMessage = "Events: [" + 
-            typicalEvents.stream()
+        String expectedMessage = "Events: ["
+            + typicalEvents.stream()
                 .map(Event::toString)
                 .reduce((a, b) -> a + ", " + b)
                 .orElse("") + "]";
@@ -60,9 +59,9 @@ public class ListEventsCommandTest {
 
         // Filter events (simulate some filtering)
         model.updateFilteredEventList(event -> event.getName().contains("Concert"));
-        
-        String expectedMessage = "Events: [" + 
-            typicalEvents.stream()
+
+        String expectedMessage = "Events: ["
+            + typicalEvents.stream()
                 .map(Event::toString)
                 .reduce((a, b) -> a + ", " + b)
                 .orElse("") + "]";

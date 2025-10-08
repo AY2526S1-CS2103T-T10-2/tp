@@ -3,8 +3,8 @@ package seedu.address.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_EVENTS;
+import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.BENSON;
@@ -16,8 +16,8 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.GuiSettings;
-import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.event.Event;
+import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.testutil.AddressBookBuilder;
 import seedu.address.testutil.EventBuilder;
 
@@ -115,7 +115,6 @@ public class ModelManagerTest {
 
         // Filter to show only events with "Meeting" in name
         modelManager.updateFilteredEventList(event -> event.getName().contains("Meeting"));
-        
         assertEquals(1, modelManager.getFilteredEventList().size());
         assertTrue(modelManager.getFilteredEventList().contains(event1));
         assertFalse(modelManager.getFilteredEventList().contains(event2));
@@ -130,11 +129,9 @@ public class ModelManagerTest {
 
         // Initially should show all events
         assertEquals(2, modelManager.getFilteredEventList().size());
-        
         // Filter to show only one event
         modelManager.updateFilteredEventList(event -> event.getName().contains("Meeting"));
         assertEquals(1, modelManager.getFilteredEventList().size());
-        
         // Reset to show all events
         modelManager.updateFilteredEventList(PREDICATE_SHOW_ALL_EVENTS);
         assertEquals(2, modelManager.getFilteredEventList().size());
