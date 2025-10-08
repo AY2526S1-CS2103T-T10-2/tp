@@ -78,5 +78,13 @@ public class Event {
                 && otherEvent.getEnd().equals(getEnd());
     }
 
-
+    @Override
+    public String toString() {
+        return "Event{" +
+                "name='" + name + '\'' +
+                ", start=" + start +
+                ", end=" + end +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }
