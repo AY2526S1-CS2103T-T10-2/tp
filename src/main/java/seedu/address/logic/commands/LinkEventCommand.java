@@ -1,7 +1,7 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_EVENT_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_EVENT_ALIAS;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.event.Event;
-import seedu.address.model.event.EventName;
+import seedu.address.model.event.EventAlias;
 import seedu.address.model.person.Person;
 
 /**
@@ -19,25 +19,25 @@ import seedu.address.model.person.Person;
 public class LinkEventCommand extends Command {
     public static final String COMMAND_WORD = "link-event";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Links a person to an event. "
-            + "Parameters: INDEX en/EVENT_NAME\n"
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Links a person to an event using its alias. "
+            + "Parameters: INDEX " + PREFIX_EVENT_ALIAS + "EVENT_ALIAS\n"
             + "Example: " + COMMAND_WORD + " 1 "
-            + PREFIX_EVENT_NAME + "Taylor Swift concert";
+            + PREFIX_EVENT_ALIAS + "TSC2025";
 
     public static final String MESSAGE_SUCCESS = "Linked %1$s to event: %2$s";
     public static final String MESSAGE_EVENT_NOT_FOUND = "Event not found.";
 
     private final Index index;
-    private final EventName eventName;
+    private final EventAlias eventAlias;
 
     /**
      * Creates a LinkEventCommand to link a person to an event
      */
-    public LinkEventCommand(Index index, EventName eventName) {
+    public LinkEventCommand(Index index, EventAlias eventAlias) {
         requireNonNull(index);
-        requireNonNull(eventName);
+        requireNonNull(eventAlias);
         this.index = index;
-        this.eventName = eventName;
+        this.eventAlias = eventAlias;
     }
 
     @Override
@@ -52,11 +52,13 @@ public class LinkEventCommand extends Command {
 
         Person personToEdit = lastShownList.get(index.getZeroBased());
 
+        // Find the event by alias (this is case insensitive)
         Event event = model.getAddressBook().getEventList().stream()
-                .filter(e -> e.getName().equalsIgnoreCase(eventName.toString()))
+                .filter(e -> e.getAlias().equalsIgnoreCase(eventAlias.toString()))
                 .findFirst()
                 .orElseThrow(() -> new CommandException(MESSAGE_EVENT_NOT_FOUND));
 
+        // Create a new LINKED person
         Person linkedPerson = new Person(
                 personToEdit.getName(),
                 personToEdit.getPhone(),

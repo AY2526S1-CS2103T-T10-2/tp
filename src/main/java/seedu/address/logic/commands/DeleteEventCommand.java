@@ -1,31 +1,34 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_EVENT_ALIAS;
 
 import java.util.List;
 
-import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.event.Event;
+import seedu.address.model.event.EventAlias;
 
 /**
- * Deletes an event identified using its displayed index from the address book.
+ * Deletes an event identified using its alias from the address book.
  */
 public class DeleteEventCommand extends Command {
     public static final String COMMAND_WORD = "delete-event";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Deletes the event identified by the index number used in the displayed event list.\n"
-            + "Parameters: INDEX (must be a positive integer)\n"
-            + "Example: " + COMMAND_WORD + " 1";
+            + ": Deletes the event identified by its event alias.\n"
+            + "Parameters: " + PREFIX_EVENT_ALIAS + "EVENT_ALIAS\n"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_EVENT_ALIAS + "TSC2025";
 
     public static final String MESSAGE_DELETE_EVENT_SUCCESS = "Deleted Event: %1$s";
+    public static final String MESSAGE_EVENT_NOT_FOUND = "No event found with alias: %1$s";
 
-    private final Index targetIndex;
-    public DeleteEventCommand(Index targetIndex) {
-        this.targetIndex = targetIndex;
+    private final EventAlias eventAlias;
+
+    public DeleteEventCommand(EventAlias eventAlias) {
+        this.eventAlias = eventAlias;
     }
 
     @Override
@@ -33,11 +36,11 @@ public class DeleteEventCommand extends Command {
         requireNonNull(model);
         List<Event> lastShownList = model.getFilteredEventList();
 
-        if (targetIndex.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_EVENT_DISPLAYED_INDEX);
-        }
+        Event eventToDelete = lastShownList.stream()
+                .filter(e -> e.getAlias().equalsIgnoreCase(eventAlias.toString()))
+                .findFirst()
+                .orElseThrow(() -> new CommandException(String.format(MESSAGE_EVENT_NOT_FOUND, eventAlias)));
 
-        Event eventToDelete = lastShownList.get(targetIndex.getZeroBased());
         model.deleteEvent(eventToDelete);
         return new CommandResult(String.format(MESSAGE_DELETE_EVENT_SUCCESS, Messages.format(eventToDelete)));
     }

@@ -3,6 +3,7 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_DESC;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_END;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_EVENT_ALIAS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EVENT_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_START;
 
@@ -17,12 +18,13 @@ import seedu.address.model.event.Event;
 public class AddEventCommand extends Command {
     public static final String COMMAND_WORD = "add-event";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a Event to the address book. "
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a Event to the address book. \n"
             + "Parameters: "
             + PREFIX_EVENT_NAME + "EVENT NAME "
+            + PREFIX_EVENT_ALIAS + "EVENT ALIAS "
             + PREFIX_START + "START DATETIME "
             + PREFIX_END + "END DATETIME "
-            + PREFIX_DESC + "DESCRIPTION "
+            + PREFIX_DESC + "DESCRIPTION \n"
             + "Example: " + COMMAND_WORD + " "
             + PREFIX_EVENT_NAME + "Taylor swift concert"
             + PREFIX_START + "2025-09-19 19:30"

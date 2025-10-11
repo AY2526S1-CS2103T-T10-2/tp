@@ -4,12 +4,13 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_DESC;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_END;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_EVENT_ALIAS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EVENT_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_START;
 
-import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.EditEventCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.event.EventAlias;
 
 /**
  * Parses input arguments and creates a new EditEventCommand object
@@ -25,19 +26,27 @@ public class EditEventCommandParser implements Parser<EditEventCommand> {
     public EditEventCommand parse(String args) throws ParseException {
         requireNonNull(args);
         ArgumentMultimap argMultimap =
-                ArgumentTokenizer.tokenize(args, PREFIX_EVENT_NAME, PREFIX_START, PREFIX_END, PREFIX_DESC);
+                ArgumentTokenizer.tokenize(args,
+                        PREFIX_EVENT_NAME,
+                        PREFIX_EVENT_ALIAS,
+                        PREFIX_START,
+                        PREFIX_END,
+                        PREFIX_DESC
+                );
 
-        Index index;
-
-        try {
-            index = ParserUtil.parseIndex(argMultimap.getPreamble());
-        } catch (ParseException pe) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditEventCommand.MESSAGE_USAGE),
-                    pe);
+        if (!argMultimap.getValue(PREFIX_EVENT_ALIAS).isPresent()) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditEventCommand.MESSAGE_USAGE));
         }
 
-        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_EVENT_NAME, PREFIX_START, PREFIX_END, PREFIX_DESC);
+        EventAlias eventAlias = ParserUtil.parseEventAlias(argMultimap.getValue(PREFIX_EVENT_ALIAS).get());
+
+        argMultimap.verifyNoDuplicatePrefixesFor(
+                PREFIX_EVENT_NAME,
+                PREFIX_EVENT_ALIAS,
+                PREFIX_START,
+                PREFIX_END,
+                PREFIX_DESC
+        );
 
         EditEventCommand.EditEventDescriptor editEventDescriptor = new EditEventCommand.EditEventDescriptor();
 
@@ -58,6 +67,6 @@ public class EditEventCommandParser implements Parser<EditEventCommand> {
             throw new ParseException(EditEventCommand.MESSAGE_NOT_EDITED);
         }
 
-        return new EditEventCommand(index, editEventDescriptor);
+        return new EditEventCommand(eventAlias, editEventDescriptor);
     }
 }

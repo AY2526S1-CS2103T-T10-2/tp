@@ -3,6 +3,7 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_DESC;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_END;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_EVENT_ALIAS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EVENT_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_START;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_EVENTS;
@@ -12,13 +13,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.CollectionUtil;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.event.Event;
+import seedu.address.model.event.EventAlias;
 import seedu.address.model.event.EventName;
 
 /**
@@ -29,33 +30,37 @@ public class EditEventCommand extends Command {
     public static final String COMMAND_WORD = "edit-event";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits the event identified "
-            + "by the index number used in the event list. "
+            + "by its event alias. "
             + "Existing values will be overwritten by the input values.\n"
-            + "Parameters: INDEX (must be a positive integer) "
+            + "Parameters: "
+            + PREFIX_EVENT_ALIAS + "ALIAS "
             + "[" + PREFIX_EVENT_NAME + "EVENT NAME] "
             + "[" + PREFIX_START + "START DATETIME] "
             + "[" + PREFIX_END + "END DATETIME] "
             + "[" + PREFIX_DESC + "DESCRIPTION]\n"
-            + "Example: " + COMMAND_WORD + " 1 "
+            + "Example: "
+            + COMMAND_WORD + " "
+            + PREFIX_EVENT_ALIAS + "TSC2025 "
             + PREFIX_START + "2025-09-19 18:30 "
-            + PREFIX_DESC + "Taylor Swift's World tour";
+            + PREFIX_DESC + "Venue changed to Indoor Stadium";
 
     public static final String MESSAGE_EDIT_EVENT_SUCCESS = "Edited Event: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
     public static final String MESSAGE_DUPLICATE_EVENT = "This event already exists in the address book.";
+    public static final String MESSAGE_EVENT_NOT_FOUND = "Event not found.";
 
-    private final Index index;
+    private final EventAlias eventAlias;
     private final EditEventDescriptor editEventDescriptor;
 
     /**
-     * @param index               of the event in the list to edit
+     * @param eventAlias of the event in the list to edit
      * @param editEventDescriptor details to edit the event with
      */
-    public EditEventCommand(Index index, EditEventDescriptor editEventDescriptor) {
-        requireNonNull(index);
+    public EditEventCommand(EventAlias eventAlias, EditEventDescriptor editEventDescriptor) {
+        requireNonNull(eventAlias);
         requireNonNull(editEventDescriptor);
 
-        this.index = index;
+        this.eventAlias = eventAlias;
         this.editEventDescriptor = editEventDescriptor;
     }
 
@@ -64,11 +69,15 @@ public class EditEventCommand extends Command {
         requireNonNull(model);
         List<Event> eventList = model.getFilteredEventList();
 
-        if (index.getZeroBased() >= eventList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_EVENT_DISPLAYED_INDEX);
+        Event eventToEdit = eventList.stream()
+                .filter(e -> e.getAlias().equalsIgnoreCase(eventAlias.toString()))
+                .findFirst()
+                .orElseThrow(() -> new CommandException(MESSAGE_EVENT_NOT_FOUND));
+
+        if (!editEventDescriptor.isAnyFieldEdited()) {
+            throw new CommandException(MESSAGE_NOT_EDITED);
         }
 
-        Event eventToEdit = eventList.get(index.getZeroBased());
         Event editedEvent = createEditedEvent(eventToEdit, editEventDescriptor);
 
         if (!eventToEdit.isSameEvent(editedEvent) && model.hasEvent(editedEvent)) {
@@ -91,7 +100,8 @@ public class EditEventCommand extends Command {
         LocalDateTime updatedStart = editEventDescriptor.getStart().orElse(eventToEdit.getStart());
         LocalDateTime updatedEnd = editEventDescriptor.getEnd().orElse(eventToEdit.getEnd());
         String updatedDescription = editEventDescriptor.getDescription().orElse(eventToEdit.getDescription());
-        return new Event(updatedName, updatedStart, updatedEnd, updatedDescription);
+
+        return new Event(updatedName, eventToEdit.getEventAlias(), updatedStart, updatedEnd, updatedDescription);
     }
 
     @Override
@@ -106,14 +116,14 @@ public class EditEventCommand extends Command {
         }
 
         EditEventCommand otherEditEventCommand = (EditEventCommand) other;
-        return index.equals(otherEditEventCommand.index)
+        return eventAlias.equals(otherEditEventCommand.eventAlias)
                 && editEventDescriptor.equals(otherEditEventCommand.editEventDescriptor);
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .add("index", index)
+                .add("eventAlias", eventAlias)
                 .add("editEventDescriptor", editEventDescriptor)
                 .toString();
     }

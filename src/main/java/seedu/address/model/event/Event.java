@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
  */
 public class Event {
     private final EventName name;
+    private final EventAlias alias;
     private final LocalDateTime start;
     private final LocalDateTime end;
     private final String description;
@@ -23,9 +24,11 @@ public class Event {
      * @throws NullPointerException if any parameter is null.
      * @throws IllegalArgumentException if start time is after end time.
      */
-    public Event(EventName name, LocalDateTime start, LocalDateTime end, String description) {
-        requireAllNonNull(name, start, end, description);
+    public Event(EventName name, EventAlias alias,
+                 LocalDateTime start, LocalDateTime end, String description) {
+        requireAllNonNull(name, alias, start, end, description);
         this.name = name;
+        this.alias = alias;
         if (start.isAfter(end)) {
             throw new IllegalArgumentException("Start time must be before end time");
         }
@@ -43,6 +46,14 @@ public class Event {
 
     public EventName getEventName() {
         return this.name;
+    }
+
+    public String getAlias() {
+        return this.alias.toString();
+    }
+
+    public EventAlias getEventAlias() {
+        return this.alias;
     }
 
     /**
@@ -86,6 +97,7 @@ public class Event {
 
         Event otherEvent = (Event) other;
         return name.equals(otherEvent.name)
+                && alias.equals(otherEvent.alias)
                 && start.equals(otherEvent.start)
                 && end.equals(otherEvent.end)
                 && description.equals(otherEvent.description);
@@ -104,6 +116,7 @@ public class Event {
 
         return otherEvent != null
                 && otherEvent.getName().equals(getName())
+                && otherEvent.getAlias().equalsIgnoreCase(getAlias())
                 && otherEvent.getStart().equals(getStart())
                 && otherEvent.getEnd().equals(getEnd());
     }
@@ -116,6 +129,7 @@ public class Event {
     public String toString() {
         return "Event{"
                 + "name='" + name + '\''
+                + " (" + alias + ")"
                 + ", start=" + start
                 + ", end=" + end
                 + ", description='" + description + '\''
