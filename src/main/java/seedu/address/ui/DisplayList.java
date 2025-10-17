@@ -6,7 +6,8 @@ package seedu.address.ui;
 public enum DisplayList {
     NO_CHANGE(""),
     PERSON("person"),
-    EVENT("event");
+    EVENT("event"),
+    TODO("todo");
 
     /** Description of the type of list **/
     private final String listType;

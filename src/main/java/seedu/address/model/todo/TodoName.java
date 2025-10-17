@@ -43,4 +43,17 @@ public class TodoName {
     public String toString() {
         return todoName;
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == null) {
+            return false;
+        }
+
+        if (!(other instanceof TodoName)) {
+            return false;
+        }
+        TodoName otherTodoName = (TodoName) other;
+        return todoName.equalsIgnoreCase(otherTodoName.todoName);
+    }
 }
