@@ -77,6 +77,15 @@ public class Todo {
         return isCompleted;
     }
 
+    /**
+     * Creates and returns a copy of this todo with the specified completion status.
+     * @param isCompleted the new completion status
+     * @return a new Todo with the same properties but different completion status
+     */
+    public Todo withCompletionStatus(boolean isCompleted) {
+        return new Todo(this.todoName, this.description, this.contactName, isCompleted);
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == this) {

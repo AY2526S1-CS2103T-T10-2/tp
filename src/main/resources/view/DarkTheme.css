@@ -363,3 +363,16 @@
   -fx-text-fill: #87ceeb !important;
   -fx-opacity: 0.9;
 }
+
+.contact-tag {
+  -fx-text-fill: white;
+  -fx-background-color: #87ceeb;
+  -fx-padding: 2 6 2 6;
+  -fx-border-radius: 3;
+  -fx-background-radius: 3;
+  -fx-font-size: 11;
+}
+
+.contact-tag.no-contact {
+  -fx-background-color: #666666;
+}

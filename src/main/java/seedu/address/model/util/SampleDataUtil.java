@@ -50,10 +50,10 @@ public class SampleDataUtil {
                 LocalDateTime.of(2025, 1, 15, 14, 0),
                 LocalDateTime.of(2025, 1, 15, 15, 0),
                 "Taylor swift eras tour"),
-            new Event(new EventName("Halloween horror night"), new EventAlias("HHN2025"),
+            new Event(new EventName("Olympics 2028"), new EventAlias("ol2028"),
                 LocalDateTime.of(2025, 1, 20, 23, 59),
                 LocalDateTime.of(2025, 1, 20, 23, 59),
-                "annual halloween horror nights at USS")
+                "Summer Olympics hosted in SG")
         };
     }
 

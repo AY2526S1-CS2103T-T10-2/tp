@@ -33,6 +33,7 @@ public class MainWindow extends UiPart<Stage> {
     // Independent Ui parts residing in this Ui container
     private PersonListPanel personListPanel;
     private EventListPanel eventListPanel;
+    private TodoListPanel todoListPanel;
     private ResultDisplay resultDisplay;
     private HelpWindow helpWindow;
 
@@ -113,6 +114,7 @@ public class MainWindow extends UiPart<Stage> {
     void fillInnerParts() {
         personListPanel = new PersonListPanel(logic.getFilteredPersonList());
         eventListPanel = new EventListPanel(logic.getFilteredEventList());
+        todoListPanel = new TodoListPanel(logic.getFilteredTodoList());
         // Initially show person list
         showPersonList();
 
@@ -187,6 +189,14 @@ public class MainWindow extends UiPart<Stage> {
     }
 
     /**
+     * Shows the todo list in the main content area.
+     */
+    public void showTodoList() {
+        personListPanelPlaceholder.getChildren().clear();
+        personListPanelPlaceholder.getChildren().add(todoListPanel.getRoot());
+    }
+
+    /**
      * Executes the command and returns the result.
      *
      * @see seedu.address.logic.Logic#execute(String)
@@ -204,6 +214,7 @@ public class MainWindow extends UiPart<Stage> {
             }
             case PERSON -> showPersonList();
             case EVENT -> showEventList();
+            case TODO -> showTodoList();
             default -> throw new CommandException("Failed to display " + displayedList + " list.");
             }
 
