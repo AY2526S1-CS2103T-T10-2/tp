@@ -19,36 +19,36 @@ import seedu.address.model.todo.exceptions.TodoNotFoundException;
 import seedu.address.testutil.PersonBuilder;
 import seedu.address.testutil.TodoBuilder;
 
-public class UniqueTodoListTest {
+public class TodoListTest {
 
-    private final UniqueTodoList uniqueTodoList = new UniqueTodoList();
+    private final TodoList todoList = new TodoList();
 
     @Test
     public void contains_nullTodo_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> uniqueTodoList.contains(null));
+        assertThrows(NullPointerException.class, () -> todoList.contains(null));
     }
 
     @Test
     public void contains_todoNotInList_returnsFalse() {
-        assertFalse(uniqueTodoList.contains(REVIEW_PROPOSAL));
+        assertFalse(todoList.contains(REVIEW_PROPOSAL));
     }
 
     @Test
     public void contains_todoInList_returnsTrue() {
-        uniqueTodoList.add(REVIEW_PROPOSAL);
-        assertTrue(uniqueTodoList.contains(REVIEW_PROPOSAL));
+        todoList.add(REVIEW_PROPOSAL);
+        assertTrue(todoList.contains(REVIEW_PROPOSAL));
     }
 
     @Test
     public void add_nullTodo_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> uniqueTodoList.add(null));
+        assertThrows(NullPointerException.class, () -> todoList.add(null));
     }
 
     @Test
     public void add_duplicateTodo_allowed() {
-        uniqueTodoList.add(REVIEW_PROPOSAL);
-        uniqueTodoList.add(REVIEW_PROPOSAL); // duplicates allowed
-        ObservableList<Todo> view = uniqueTodoList.asUnmodifiableObservableList();
+        todoList.add(REVIEW_PROPOSAL);
+        todoList.add(REVIEW_PROPOSAL); // duplicates allowed
+        ObservableList<Todo> view = todoList.asUnmodifiableObservableList();
         assertEquals(2, view.size());
         assertEquals(REVIEW_PROPOSAL, view.get(0));
         assertEquals(REVIEW_PROPOSAL, view.get(1));
@@ -57,83 +57,83 @@ public class UniqueTodoListTest {
     @Test
     public void setTodo_nullTargetTodo_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () ->
-                uniqueTodoList.setTodo(null, REVIEW_PROPOSAL));
+                todoList.setTodo(null, REVIEW_PROPOSAL));
     }
 
     @Test
     public void setTodo_nullEditedTodo_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () ->
-                uniqueTodoList.setTodo(REVIEW_PROPOSAL, null));
+                todoList.setTodo(REVIEW_PROPOSAL, null));
     }
 
     @Test
     public void setTodo_targetTodoNotInList_throwsTodoNotFoundException() {
         assertThrows(TodoNotFoundException.class, () ->
-                uniqueTodoList.setTodo(REVIEW_PROPOSAL, REVIEW_PROPOSAL));
+                todoList.setTodo(REVIEW_PROPOSAL, REVIEW_PROPOSAL));
     }
 
     @Test
     public void setTodo_replaceExisting_success() {
-        uniqueTodoList.add(REVIEW_PROPOSAL);
+        todoList.add(REVIEW_PROPOSAL);
         Todo edited = new TodoBuilder(REVIEW_PROPOSAL)
                 .withDescription("Re-review proposal with finance inputs")
                 .build();
 
-        uniqueTodoList.setTodo(REVIEW_PROPOSAL, edited);
+        todoList.setTodo(REVIEW_PROPOSAL, edited);
 
-        UniqueTodoList expected = new UniqueTodoList();
+        TodoList expected = new TodoList();
         expected.add(edited);
-        assertEquals(expected.asUnmodifiableObservableList(), uniqueTodoList.asUnmodifiableObservableList());
+        assertEquals(expected.asUnmodifiableObservableList(), todoList.asUnmodifiableObservableList());
     }
 
     @Test
     public void remove_nullTodo_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> uniqueTodoList.remove(null));
+        assertThrows(NullPointerException.class, () -> todoList.remove(null));
     }
 
     @Test
     public void remove_todoDoesNotExist_throwsTodoNotFoundException() {
-        assertThrows(TodoNotFoundException.class, () -> uniqueTodoList.remove(REVIEW_PROPOSAL));
+        assertThrows(TodoNotFoundException.class, () -> todoList.remove(REVIEW_PROPOSAL));
     }
 
     @Test
     public void remove_existingTodo_removesTodo() {
-        uniqueTodoList.add(REVIEW_PROPOSAL);
-        uniqueTodoList.remove(REVIEW_PROPOSAL);
-        UniqueTodoList expected = new UniqueTodoList();
-        assertEquals(expected.asUnmodifiableObservableList(), uniqueTodoList.asUnmodifiableObservableList());
+        todoList.add(REVIEW_PROPOSAL);
+        todoList.remove(REVIEW_PROPOSAL);
+        TodoList expected = new TodoList();
+        assertEquals(expected.asUnmodifiableObservableList(), todoList.asUnmodifiableObservableList());
     }
 
     @Test
     public void setTodos_nullList_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> uniqueTodoList.setTodos((List<Todo>) null));
+        assertThrows(NullPointerException.class, () -> todoList.setTodos((List<Todo>) null));
     }
 
     @Test
     public void setTodos_list_replacesOwnListWithProvidedList() {
-        uniqueTodoList.add(REVIEW_PROPOSAL);
+        todoList.add(REVIEW_PROPOSAL);
         List<Todo> replacement = Collections.singletonList(SEND_INVITES);
-        uniqueTodoList.setTodos(replacement);
+        todoList.setTodos(replacement);
 
-        UniqueTodoList expected = new UniqueTodoList();
+        TodoList expected = new TodoList();
         expected.add(SEND_INVITES);
-        assertEquals(expected.asUnmodifiableObservableList(), uniqueTodoList.asUnmodifiableObservableList());
+        assertEquals(expected.asUnmodifiableObservableList(), todoList.asUnmodifiableObservableList());
     }
 
     @Test
     public void setTodos_listWithDuplicates_allowed() {
         List<Todo> withDuplicates = Arrays.asList(REVIEW_PROPOSAL, REVIEW_PROPOSAL, SEND_INVITES);
-        uniqueTodoList.setTodos(withDuplicates);
-        assertEquals(3, uniqueTodoList.asUnmodifiableObservableList().size());
-        assertEquals(REVIEW_PROPOSAL, uniqueTodoList.asUnmodifiableObservableList().get(0));
-        assertEquals(REVIEW_PROPOSAL, uniqueTodoList.asUnmodifiableObservableList().get(1));
-        assertEquals(SEND_INVITES, uniqueTodoList.asUnmodifiableObservableList().get(2));
+        todoList.setTodos(withDuplicates);
+        assertEquals(3, todoList.asUnmodifiableObservableList().size());
+        assertEquals(REVIEW_PROPOSAL, todoList.asUnmodifiableObservableList().get(0));
+        assertEquals(REVIEW_PROPOSAL, todoList.asUnmodifiableObservableList().get(1));
+        assertEquals(SEND_INVITES, todoList.asUnmodifiableObservableList().get(2));
     }
 
     @Test
     public void asUnmodifiableObservableList_modifyList_throwsUnsupportedOperationException() {
         assertThrows(UnsupportedOperationException.class, () ->
-                uniqueTodoList.asUnmodifiableObservableList().remove(0));
+                todoList.asUnmodifiableObservableList().remove(0));
     }
 
     @Test
@@ -150,12 +150,12 @@ public class UniqueTodoListTest {
                 .withoutContactName()
                 .build();
 
-        uniqueTodoList.setTodos(Arrays.asList(linked, notLinked));
-        uniqueTodoList.setPerson(from, to);
+        todoList.setTodos(Arrays.asList(linked, notLinked));
+        todoList.setPerson(from, to);
 
         // linked todo's contact should now be 'to', other remains unchanged
-        assertEquals(to.getName(), uniqueTodoList.asUnmodifiableObservableList().get(0).getContactName());
-        assertEquals(notLinked.getContactName(), uniqueTodoList.asUnmodifiableObservableList().get(1).getContactName());
+        assertEquals(to.getName(), todoList.asUnmodifiableObservableList().get(0).getContactName());
+        assertEquals(notLinked.getContactName(), todoList.asUnmodifiableObservableList().get(1).getContactName());
     }
 
     @Test
@@ -166,16 +166,16 @@ public class UniqueTodoListTest {
                 .withContactName(p.getName().fullName)
                 .build();
 
-        uniqueTodoList.add(linked);
-        uniqueTodoList.setPerson(p, p);
+        todoList.add(linked);
+        todoList.setPerson(p, p);
 
         // list unchanged
-        assertEquals(1, uniqueTodoList.asUnmodifiableObservableList().size());
-        assertEquals(p.getName(), uniqueTodoList.asUnmodifiableObservableList().get(0).getContactName());
+        assertEquals(1, todoList.asUnmodifiableObservableList().size());
+        assertEquals(p.getName(), todoList.asUnmodifiableObservableList().get(0).getContactName());
     }
 
     @Test
     public void toStringMethod_matchesBackedListString() {
-        assertEquals(uniqueTodoList.asUnmodifiableObservableList().toString(), uniqueTodoList.toString());
+        assertEquals(todoList.asUnmodifiableObservableList().toString(), todoList.toString());
     }
 }

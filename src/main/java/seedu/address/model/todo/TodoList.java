@@ -15,7 +15,7 @@ import seedu.address.model.todo.exceptions.TodoNotFoundException;
 /**
  * A list of todos that enforces uniqueness between its elements and does not allow nulls.
  */
-public class UniqueTodoList implements Iterable<Todo> {
+public class TodoList implements Iterable<Todo> {
 
     private final ObservableList<Todo> internalList = FXCollections.observableArrayList();
     private final ObservableList<Todo> internalUnmodifiableList =

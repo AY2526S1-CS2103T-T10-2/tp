@@ -11,7 +11,7 @@ import seedu.address.model.event.UniqueEventList;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.UniquePersonList;
 import seedu.address.model.todo.Todo;
-import seedu.address.model.todo.UniqueTodoList;
+import seedu.address.model.todo.TodoList;
 
 /**
  * Wraps all data at the address-book level
@@ -24,7 +24,7 @@ public class AddressBook implements ReadOnlyAddressBook {
 
     private final UniquePersonList persons;
     private final UniqueEventList events;
-    private final UniqueTodoList todos;
+    private final TodoList todos;
 
     /*
      * The 'unusual' code block below is a non-static initialization block, sometimes used to avoid duplication
@@ -36,7 +36,7 @@ public class AddressBook implements ReadOnlyAddressBook {
     {
         persons = new UniquePersonList();
         events = new UniqueEventList();
-        todos = new UniqueTodoList();
+        todos = new TodoList();
     }
 
     public AddressBook() {}
