@@ -13,7 +13,7 @@ import seedu.address.model.person.Person;
 import seedu.address.model.todo.exceptions.TodoNotFoundException;
 
 /**
- * A list of todos that enforces uniqueness between its elements and does not allow nulls.
+ * A list of todos.
  */
 public class TodoList implements Iterable<Todo> {
 
@@ -31,7 +31,6 @@ public class TodoList implements Iterable<Todo> {
 
     /**
      * Adds a todo to the list.
-     * The Todo must not already exist in the list.
      */
     public void add(Todo toAdd) {
         requireNonNull(toAdd);
@@ -45,7 +44,6 @@ public class TodoList implements Iterable<Todo> {
 
     /**
      * Removes the equivalent todo from the list.
-     * The todo must exist in the list.
      */
     public void remove(Todo toRemove) {
         requireNonNull(toRemove);
@@ -57,7 +55,6 @@ public class TodoList implements Iterable<Todo> {
     /**
      * Replaces the todo {@code target} in the list with {@code editedTodo}.
      * {@code target} must exist in the list.
-     * The todo {@code editedTodo} must not be the same as another existing todo in the list.
      */
     public void setTodo(Todo target, Todo editedTodo) {
         requireAllNonNull(target, editedTodo);
