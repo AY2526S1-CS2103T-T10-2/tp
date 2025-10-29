@@ -10,7 +10,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
-import seedu.address.model.todo.exceptions.DuplicateTodoException;
 import seedu.address.model.todo.exceptions.TodoNotFoundException;
 
 /**
@@ -36,17 +35,11 @@ public class UniqueTodoList implements Iterable<Todo> {
      */
     public void add(Todo toAdd) {
         requireNonNull(toAdd);
-        if (contains(toAdd)) {
-            throw new DuplicateTodoException();
-        }
         internalList.add(toAdd);
     }
 
     public void setTodos(List<Todo> todos) {
         requireAllNonNull(todos);
-        if (!todosAreUnique(todos)) {
-            throw new DuplicateTodoException();
-        }
         internalList.setAll(todos);
     }
 
@@ -73,10 +66,6 @@ public class UniqueTodoList implements Iterable<Todo> {
         if (index == -1) {
             throw new TodoNotFoundException();
         }
-
-        if (!target.equals(editedTodo) && contains(editedTodo)) {
-            throw new DuplicateTodoException();
-        }
         internalList.set(index, editedTodo);
     }
 
@@ -99,19 +88,6 @@ public class UniqueTodoList implements Iterable<Todo> {
         }
     }
 
-    /**
-     * Returns true if {@code todos} contains only unique todos.
-     */
-    private boolean todosAreUnique(List<Todo> todos) {
-        for (int i = 0; i < todos.size() - 1; i++) {
-            for (int j = i + 1; j < todos.size(); j++) {
-                if (todos.get(i).isSameTodo(todos.get(j))) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
 
     /** Returns an unmodifiable view of the internal list. */
     public ObservableList<Todo> asUnmodifiableObservableList() {
@@ -121,5 +97,10 @@ public class UniqueTodoList implements Iterable<Todo> {
     @Override
     public Iterator<Todo> iterator() {
         return internalList.iterator();
+    }
+
+    @Override
+    public String toString() {
+        return internalList.toString();
     }
 }

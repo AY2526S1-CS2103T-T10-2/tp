@@ -61,16 +61,6 @@ public class AddTodoCommandTest {
     }
 
     @Test
-    public void execute_duplicateTodo_throwsCommandException() {
-        Todo validTodo = new TodoBuilder().build();
-        AddTodoCommand addTodoCommand = new AddTodoCommand(validTodo);
-        ModelStub modelStub = new ModelStubWithTodo(validTodo);
-
-        assertThrows(CommandException.class,
-                AddTodoCommand.MESSAGE_DUPLICATE_TODO, () -> addTodoCommand.execute(modelStub));
-    }
-
-    @Test
     public void execute_contactNameProvidedButNotFound_throwsCommandException() {
         ModelStubAcceptingTodoAdded modelStub = new ModelStubAcceptingTodoAdded();
         Todo todoWithMissingContact = new TodoBuilder().withContactName("N").build();
