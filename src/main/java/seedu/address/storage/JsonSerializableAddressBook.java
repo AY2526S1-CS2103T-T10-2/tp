@@ -23,7 +23,6 @@ class JsonSerializableAddressBook {
 
     public static final String MESSAGE_DUPLICATE_PERSON = "Persons list contains duplicate person(s).";
     public static final String MESSAGE_DUPLICATE_EVENT = "Events list contains duplicate event(s).";
-    public static final String MESSAGE_DUPLICATE_TODO = "Todos list contains duplicate todo(s).";
 
     private final List<JsonAdaptedPerson> persons = new ArrayList<>();
     private final List<JsonAdaptedEvent> events = new ArrayList<>();
@@ -83,9 +82,6 @@ class JsonSerializableAddressBook {
 
         for (JsonAdaptedTodo jsonAdaptedTodo : todos) {
             Todo todo = jsonAdaptedTodo.toModelType();
-            if (addressBook.hasTodo(todo)) {
-                throw new IllegalValueException(MESSAGE_DUPLICATE_TODO);
-            }
             addressBook.addTodo(todo);
         }
         return addressBook;
